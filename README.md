@@ -1,6 +1,8 @@
 # YADP
 Yet Another xDelta Patcher
 
+![alt tag](http://i.imgur.com/hy9eyIW.png)
+
 YADP is the first front end for xDelta3 running on Linux.
 
 Actually YADP is able to patch ROMS without problem. ASAP i'l start working on patch generator
@@ -22,7 +24,7 @@ apt-get install yad xdelta3 awk
 yad is officially in the repository of Debian starting from Debian 9 so if you are running a version of debian <= 8 you have to compile it from source
 so go here https://code.google.com/p/yad/downloads and downlaod latest source version
 
-solve dependencies
+#solve dependencies for yad:
 
 **libgtk3-dev initltool** 
 
