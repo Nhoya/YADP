@@ -1,0 +1,78 @@
+#!/bin/bash
+#		Copyright (C) 2015  Nhoya.
+#
+#   YADP is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+dep=(awk xdelta3)
+#checkdep
+checkdep(){
+	if (! which yad &>/dev/null ); then
+		echo "please install yad"
+		exit 0
+	else
+		for i in "${dep[@]}"; do
+        		if  ( ! which $i &>/dev/null ); then
+				miss=("${miss[@]}" "and" "$i")
+				missing="1"
+			fi
+		done
+	fi
+}
+
+#license form
+license(){
+	yad --title=License --image=document --text "YADP coded by Nhoya is released under GNU GPL v3.\n\nGitHub Repo: https://github.com/Nhoya/YADP" --button=gtk-ok:0
+}
+
+export -f license
+
+
+#main body
+checkdep
+if [[ $missing -eq 1 ]]; then
+	misslist=$(echo ${miss[@]} | cut -c 4-)
+	yad  --title=Error  --window-icon=error --image=error --text=" $misslist not found \n please solve dependencies before run the program "
+else
+
+
+#GUI
+guif(){
+gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch"  --form --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
+bpn=$?
+ROM=$(echo $gui | awk 'BEGIN {FS="|"} {print$1}')
+patch_file=$(echo $gui | awk 'BEGIN {FS="|"}{print$2}')
+}
+#if exit is pressed
+check_buttonstatus(){
+	if [[ $bpn -eq 1 ]]; then
+		echo nope
+		exit 0
+#if OK button is pressed
+	elif [[ $bpn -eq 0 ]]; then
+			if [[ $ROM == "" ]] || [[ $patch_file == "" ]]; then
+			 	yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are empty"
+				guif
+				check_buttonstatus $bpn
+			else
+					xdelta3 -dfs $ROM $patch_file  "$(echo $ROM |sed "s/.iso//")"_patched.iso |yad --title="xDelta Patcher" --image=download  --text "patching..." --progress --pulsate --auto-close 
+					yad --width 500 --title="Success" --image=ok --text="ROM Patched!"
+			fi
+	fi
+}
+
+guif
+check_buttonstatus $bpn
+fi
+
+
