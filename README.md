@@ -14,8 +14,9 @@ before starting you need to install:
 
 ##Ubuntu Based Distro
 
-`apt-get install yad xdelta3 awk
-
+```
+apt-get install yad xdelta3 awk
+```
 ##Debian <= 8 and others distros without yad in the repos
 
 yad is officially in the repository of Debian starting from Debian 9 so if you are running a version of debian <= 8 you have to compile it from source
@@ -27,23 +28,29 @@ solve dependencies
 
 extract the archive
 
-`tar xf yad-x.x.x.tar.xz && cd yad-x.x.x
+```
+tar xf yad-x.x.x.tar.xz && cd yad-x.x.x
+```
 
 running the configuration script
 
-`./configure
-
+```
+./configure
+```
 building
 
-`make && sudo make install
-
+```
+make && sudo make install
+```
 Or, if you don't like or are not able to compile just download and install the pre-compiled package from here
 http://pkgs.org/download/yad
 
 After solving dependencies just clone the repo 
 
-`https://github.com/Nhoya/YADP
-
-`cd YADP && chmod +x YADP
-
+```
+git clone https://github.com/Nhoya/YADP
+```
+```
+cd YADP && chmod +x YADP
+```
 double click on the YADP file to run it.
