@@ -1,13 +1,14 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QMessageBox, QFileDialog)
+from PyQt5.QtWidgets import (QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QMessageBox, QFileDialog,
+                             QFormLayout, QSizePolicy, QSpacerItem)
 from PyQt5.QtCore import QCoreApplication
 
+
 class YADP_GUI(QWidget):
+
     def __init__(self):
         super().__init__()
-
         self.initUI()
-
 
     def initUI(self):
 
@@ -19,40 +20,40 @@ class YADP_GUI(QWidget):
         license_button = QPushButton("License")
         license_button.clicked.connect(self.showLicense)
 
+        layout_upper = QVBoxLayout()
+        layout_rom = QHBoxLayout()
+        layout_xdelta = QHBoxLayout()
         rom_path = QLineEdit(self)
-        rom_path.resize(200, 30)
-        rom_path.move(70, 10)
-
-        xdelta_path = QLineEdit(self)
-        xdelta_path.resize(200, 30)
-        xdelta_path.move(70, 50)
-
+        rom_path.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        rom_label = QLabel("Rom path")
+        rom_label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         select_rom = QPushButton("Select", self)
-        select_rom.move(290, 10)
         select_rom.setToolTip('Select <b>ROM</b> file')
         select_rom.clicked.connect(self.openRom)
-
-        select_xdelta= QPushButton("Select",self)
-        select_xdelta.move (290, 50)
+        xdelta_path = QLineEdit(self)
+        xdelta_label = QLabel("Xdelta path")
+        select_xdelta = QPushButton("Select",self)
         select_xdelta.setToolTip('Select <b>xdelta</b> file')
         select_xdelta.clicked.connect(self.openXdelta)
+        layout_xdelta.addWidget(xdelta_label)
+        layout_xdelta.addWidget(xdelta_path)
+        layout_xdelta.addWidget(select_xdelta)
+        layout_rom.addWidget(rom_label)
+        layout_rom.addWidget(rom_path)
+        layout_rom.addWidget(select_rom)
+        layout_upper.addLayout(layout_rom)
+        layout_upper.addLayout(layout_xdelta)
 
-        lab1 = QLabel("ROM:", self)
-        lab1.move(30,10)
+        layout_bottom = QHBoxLayout()
+        layout_bottom.addWidget(license_button)
+        layout_bottom.addWidget(patch_button)
+        layout_bottom.addWidget(exit_button)
 
-        lab2 = QLabel("xdelta:",self)
-        lab2.move(20,50)
-
-
-        hblayout = QHBoxLayout()
-        hblayout.addStretch(1)
-        hblayout.addWidget(license_button)
-        hblayout.addWidget(patch_button)
-        hblayout.addWidget(exit_button)
-        vblayout = QVBoxLayout()
-        vblayout.addStretch(1)
-        vblayout.addLayout(hblayout)
-        self.setLayout(vblayout)
+        layout_main = QVBoxLayout()
+        layout_main.addLayout(layout_upper)
+        layout_main.addLayout(layout_bottom)
+        self.setLayout(layout_main)
+        self.setMaximumHeight(150)
         self.setGeometry(400, 400, 400, 150)
         self.setWindowTitle('YADP')
         self.show()
@@ -70,17 +71,16 @@ class YADP_GUI(QWidget):
     def openRom(self):
         rom = QFileDialog.getOpenFileName(self, "Select Rom")
         if rom:
-            print (rom)
+            print (rom[0])
 
     def openXdelta(self):
-        path = "/home/nhoya"
         xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file")
         if xfile:
-            print (xfile)
-            self.showXdelta(xfile) #showXdelta() takes 1 positional argument but 2 were given
+            print (xfile[0])
+            self.showXdelta(xfile[0]) #showXdelta() takes 1 positional argument but 2 were given
 
-    def showXdelta(self):
-        self.xdelta_path.Text("xfile")
+    def showXdelta(self, path):
+        self.xdelta_path.setText(path)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
