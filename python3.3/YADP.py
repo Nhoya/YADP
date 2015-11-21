@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QMessageBox, QFileDialog,
+from PyQt5.QtWidgets import (QWidget, QLabel,QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QMessageBox, QFileDialog,
                              QFormLayout, QSizePolicy, QSpacerItem)
 from PyQt5.QtCore import QCoreApplication
 
@@ -13,6 +13,7 @@ class YADP_GUI(QWidget):
     def initUI(self):
 
         patch_button = QPushButton("Patch")
+        #patch_button.clicked.connect(self.patchClicked)
 
         exit_button = QPushButton("Exit")
         exit_button.clicked.connect(QCoreApplication.instance().quit)
@@ -48,6 +49,8 @@ class YADP_GUI(QWidget):
         layout_bottom.addWidget(license_button)
         layout_bottom.addWidget(patch_button)
         layout_bottom.addWidget(exit_button)
+        progressBar = QProgressBar(self)
+        #progressBar.setRange(0,0)
 
         layout_main = QVBoxLayout()
         layout_main.addLayout(layout_upper)
@@ -72,15 +75,21 @@ class YADP_GUI(QWidget):
         rom = QFileDialog.getOpenFileName(self, "Select Rom")
         if rom:
             print (rom[0])
+            self.showRom(rom[0])
 
     def openXdelta(self):
         xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file")
         if xfile:
             print (xfile[0])
-            self.showXdelta(xfile[0]) #showXdelta() takes 1 positional argument but 2 were given
+            self.showXdelta(xfile[0]) #s
 
     def showXdelta(self, path):
         self.xdelta_path.setText(path)
+
+    def showRom(self, rom):
+        self.rom_path.setText(rom)
+
+    #def patchClicked(self, rom, pathx):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
