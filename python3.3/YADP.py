@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import sys
 from PyQt5.QtWidgets import (QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QInputDialog, QMessageBox)
 from PyQt5.QtCore import QCoreApplication
@@ -12,19 +11,19 @@ class YADP_GUI(QWidget):
 
     def initUI(self):
         patch_button = QPushButton("Patch")
-        exit_button = QPushButton("Exit") 
+        exit_button = QPushButton("Exit")
         license_button = QPushButton("License")
         exit_button.clicked.connect(QCoreApplication.instance().quit);
         license_button.clicked.connect(self.showLicense)
-        box1 = QHBoxLayout()
-        box1.addStretch(1)
-        box1.addWidget(license_button)
-        box1.addWidget(patch_button)
-        box1.addWidget(exit_button)
-        box2 = QVBoxLayout()
-        box2.addStretch(1)
-        box2.addLayout(box1)
-        self.setLayout(box2)
+        hblayout = QHBoxLayout()
+        hblayout.addStretch(1)
+        hblayout.addWidget(license_button)
+        hblayout.addWidget(patch_button)
+        hblayout.addWidget(exit_button)
+        vblayout = QVBoxLayout()
+        vblayout.addStretch(1)
+        vblayout.addLayout(hblayout)
+        self.setLayout(vblayout)
         self.setGeometry(400, 400, 400, 150)
         self.setWindowTitle('YADP')
         self.show()
@@ -43,4 +42,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = YADP_GUI()
     sys.exit(app.exec_())
-
