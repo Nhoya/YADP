@@ -47,7 +47,6 @@ class YADP_GUI(QWidget):
         layout_rom.addWidget(select_rom)
         layout_upper.addLayout(layout_rom)
         layout_upper.addLayout(layout_xdelta)
-        layout_upper.addWidget(self.progressBar)
         layout_bottom = QHBoxLayout()
         layout_bottom.addWidget(license_button)
         layout_bottom.addWidget(patch_button)
