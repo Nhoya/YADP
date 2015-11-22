@@ -1,4 +1,4 @@
-import sys
+import sys, base64
 from PyQt5.QtWidgets import (QWidget, QLabel,QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout,QApplication, QLineEdit, QMessageBox, QFileDialog,
                              QFormLayout, QSizePolicy, QSpacerItem)
 from PyQt5.QtCore import QCoreApplication
@@ -86,6 +86,7 @@ class YADP_GUI(QWidget):
         if xfile:
             #print (xfile[0])
             self.showXdelta(xfile[0])
+            self.showXdeltaFileDesc(xfile[0])
 
     def showXdelta(self, path):
         self.xdelta_path.setText(path)
@@ -115,6 +116,32 @@ class YADP_GUI(QWidget):
             if conf == QMessageBox.Ok:
                 self.patch_button.setEnabled(True)
 
+    def showXdeltaFileDesc(self, xfile):
+        f = open(xfile, 'rb')
+        with f:
+            byte = bytearray()
+            length = 0
+
+            f.seek(5)
+            while True:
+                size = length << 7
+                byte = f.read(1)
+                length = size | (byte[0] & 0x7F)
+
+                if (byte[0] & 0x80) == 0:
+                    break;
+
+            if length == 0:
+                return
+
+            tmp = f.read(length)
+            f.close()
+
+            desc = tmp[2:]
+            desc = base64.b64decode(desc)
+            desc = desc.decode('utf-8')
+    
+            QMessageBox.about(self, "Description", desc)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
