@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QLabel,QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QMessageBox, QFileDialog,
+from PyQt5.QtWidgets import (QWidget, QLabel,QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout,QApplication, QLineEdit, QMessageBox, QFileDialog,
                              QFormLayout, QSizePolicy, QSpacerItem)
 from PyQt5.QtCore import QCoreApplication
 
@@ -13,7 +13,7 @@ class YADP_GUI(QWidget):
     def initUI(self):
 
         patch_button = QPushButton("Patch")
-        #patch_button.clicked.connect(self.patchClicked)
+        patch_button.clicked.connect(self.patchClicked)
 
         exit_button = QPushButton("Exit")
         exit_button.clicked.connect(QCoreApplication.instance().quit)
@@ -24,6 +24,7 @@ class YADP_GUI(QWidget):
         layout_upper = QVBoxLayout()
         layout_rom = QHBoxLayout()
         layout_xdelta = QHBoxLayout()
+
         self.rom_path = QLineEdit(self)
         self.rom_path.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.rom_label = QLabel("Rom path")
@@ -36,6 +37,8 @@ class YADP_GUI(QWidget):
         select_xdelta = QPushButton("Select",self)
         select_xdelta.setToolTip('Select <b>xdelta</b> file')
         select_xdelta.clicked.connect(self.openXdelta)
+        self.progressBar = QProgressBar(self)
+        self.progressBar.hide()
         layout_xdelta.addWidget(self.xdelta_label)
         layout_xdelta.addWidget(self.xdelta_path)
         layout_xdelta.addWidget(select_xdelta)
@@ -44,13 +47,14 @@ class YADP_GUI(QWidget):
         layout_rom.addWidget(select_rom)
         layout_upper.addLayout(layout_rom)
         layout_upper.addLayout(layout_xdelta)
-
+        layout_upper.addWidget(self.progressBar)
         layout_bottom = QHBoxLayout()
         layout_bottom.addWidget(license_button)
         layout_bottom.addWidget(patch_button)
         layout_bottom.addWidget(exit_button)
-        progressBar = QProgressBar(self)
-        #progressBar.setRange(0,0)
+        layout_bottom.addWidget(self.progressBar)
+
+
 
         layout_main = QVBoxLayout()
         layout_main.addLayout(layout_upper)
@@ -89,7 +93,15 @@ class YADP_GUI(QWidget):
     def showRom(self, rom):
         self.rom_path.setText(rom)
 
-    #def patchClicked(self, rom, pathx):
+
+    def patchClicked(self):
+        self.progressBar.setRange(0,0)
+        self.progressBar.show()
+
+        rom = self.rom_path.text()
+        xdelta_file = self.xdelta_path.text()
+        print (rom)
+        print (xdelta_file)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
