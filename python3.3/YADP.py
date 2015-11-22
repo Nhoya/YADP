@@ -137,11 +137,11 @@ class YADP_GUI(QWidget):
             tmp = f.read(length)
             f.close()
 
-            desc = tmp[2:]
-            desc = base64.b64decode(desc)
-            desc = desc.decode('utf-8')
-    
-            QMessageBox.about(self, "Description", desc)
+            if int(tmp[0]) == 94 and int(tmp[1]) == 42:         # 94 = '^', 42 = '*'
+                desc = tmp[2:]
+                desc = base64.b64decode(desc)
+                desc = desc.decode('utf-8')
+                QMessageBox.about(self, "Description", desc)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
