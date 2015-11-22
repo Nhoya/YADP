@@ -12,8 +12,9 @@ class YADP_GUI(QWidget):
 
     def initUI(self):
 
-        patch_button = QPushButton("Patch")
-        patch_button.clicked.connect(self.patchClicked)
+        self.patch_button = QPushButton("Patch")
+    #    self.patch_button.setEnabled(False)
+        self.patch_button.clicked.connect(self.patchClicked)
 
         exit_button = QPushButton("Exit")
         exit_button.clicked.connect(QCoreApplication.instance().quit)
@@ -49,7 +50,7 @@ class YADP_GUI(QWidget):
         layout_upper.addLayout(layout_xdelta)
         layout_bottom = QHBoxLayout()
         layout_bottom.addWidget(license_button)
-        layout_bottom.addWidget(patch_button)
+        layout_bottom.addWidget(self.patch_button)
         layout_bottom.addWidget(exit_button)
         layout_bottom.addWidget(self.progressBar)
 
@@ -77,14 +78,14 @@ class YADP_GUI(QWidget):
     def openRom(self):
         rom = QFileDialog.getOpenFileName(self, "Select Rom")
         if rom:
-            print (rom[0])
+           #print (rom[0])
             self.showRom(rom[0])
 
     def openXdelta(self):
         xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file")
         if xfile:
-            print (xfile[0])
-            self.showXdelta(xfile[0]) #s
+            #print (xfile[0])
+            self.showXdelta(xfile[0])
 
     def showXdelta(self, path):
         self.xdelta_path.setText(path)
@@ -96,11 +97,24 @@ class YADP_GUI(QWidget):
     def patchClicked(self):
         self.progressBar.setRange(0,0)
         self.progressBar.show()
+        self.patch_button.setEnabled(False)
+
 
         rom = self.rom_path.text()
         xdelta_file = self.xdelta_path.text()
-        print (rom)
-        print (xdelta_file)
+
+        if rom and xdelta_file:
+            self.progressBar.show()
+            print (rom)
+            print (xdelta_file)
+        else:
+            self.progressBar.hide()
+            conf = QMessageBox.question(self, 'Error',
+            "Please select ROM and xdelta file before patching", QMessageBox.Ok)
+
+            if conf == QMessageBox.Ok:
+                self.patch_button.setEnabled(True)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
