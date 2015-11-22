@@ -76,13 +76,13 @@ class YADP_GUI(QWidget):
                                                   "GNU General Public License for more details.")
 
     def openRom(self):
-        rom = QFileDialog.getOpenFileName(self, "Select Rom")
+        rom = QFileDialog.getOpenFileName(self, "Select Rom", "", "All files (*.*);;*.iso")
         if rom:
            #print (rom[0])
             self.showRom(rom[0])
 
     def openXdelta(self):
-        xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file")
+        xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file","", "All files (*.*);;*.xdelta")
         if xfile:
             #print (xfile[0])
             self.showXdelta(xfile[0])
