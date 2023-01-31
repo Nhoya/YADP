@@ -60,12 +60,16 @@ check_buttonstatus(){
 		exit 0
 #if OK button is pressed
 	elif [[ $bpn -eq 0 ]]; then
-			if [[ $ROM == "" ]] || [[ $patch_file == "" ]]; then
-			 	yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are empty"
+			if [[ "$ROM" == "" ]] || [[ "$patch_file" == "" ]]; then
+			 	yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are empty."
+				guif
+				check_buttonstatus $bpn
+			elif [[ ! "$ROM" == *".iso"* ]] || [[ ! "$patch_file" == *".xdelta"* ]]
+				yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are incorrect."
 				guif
 				check_buttonstatus $bpn
 			else
-					xdelta3 -dfs $ROM $patch_file  "$(echo $ROM |sed "s/.iso//")"_patched.iso |yad --title="xDelta Patcher" --image=download  --text "patching..." --progress --pulsate --auto-close 
+					xdelta3 -dfs "$ROM" "$patch_file"  "$(echo $ROM |sed "s/.iso//")_patched.iso" |yad --title="xDelta Patcher" --image=download  --text "patching..." --progress --pulsate --auto-close 
 					yad --width 500 --title="Success" --image=ok --text="ROM Patched!"
 			fi
 	fi
