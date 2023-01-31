@@ -64,7 +64,7 @@ check_buttonstatus(){
 			 	yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are empty."
 				guif
 				check_buttonstatus $bpn
-			elif [[ ! "$ROM" == *".iso"* ]] || [[ ! "$patch_file" == *".xdelta"* ]]
+			elif [[ ! "$ROM" == *".iso"* ]] || [[ ! "$patch_file" == *".xdelta"* ]]; then
 				yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are incorrect."
 				guif
 				check_buttonstatus $bpn
