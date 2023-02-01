@@ -1,5 +1,6 @@
 #!/bin/bash
-#		Copyright (C) 2015  Nhoya.
+
+#		            Copyright (C) 2015  Nhoya.
 #
 #   YADP is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -14,15 +15,17 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+
+# Check if dependencies are present.
 dep=(awk xdelta3)
-#checkdep
-checkdep(){
+checkdep()
+{
 	if (! which yad &>/dev/null ); then
 		echo "please install yad"
 		exit 0
 	else
 		for i in "${dep[@]}"; do
-        		if  ( ! which $i &>/dev/null ); then
+        	if ( ! which $i &>/dev/null ); then
 				miss=("${miss[@]}" "and" "$i")
 				missing="1"
 			fi
@@ -30,49 +33,61 @@ checkdep(){
 	fi
 }
 
-#license form
-license(){
-	yad --title=License --image=document --text "YADP coded by Nhoya is released under GNU GPL v3.\n\nGitHub Repo: https://github.com/Nhoya/YADP" --button=gtk-ok:0
-}
 
+# License.
+license()
+{
+	yad --title=License --image=document \
+        --text "YADP coded by Nhoya is released under GNU GPL v3.\n\nGitHub Repo: https://github.com/Nhoya/YADP" --button=gtk-ok:0
+}
 export -f license
 
 
-#main body
+# Main body.
 checkdep
 if [[ $missing -eq 1 ]]; then
 	misslist=$(echo ${miss[@]} | cut -c 4-)
 	yad  --title=Error  --window-icon=error --image=error --text=" $misslist not found \n please solve dependencies before run the program "
+
 else
+    #GUI
+    guif()
+    {
+        gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch" \
+            --form --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
 
+        bpn=$?
+        ROM=$(echo $gui | awk 'BEGIN {FS="|"} {print$1}')
+        patch_file=$(echo $gui | awk 'BEGIN {FS="|"}{print$2}')
+    }
 
-#GUI
-guif(){
-gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch"  --form --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
-bpn=$?
-ROM=$(echo $gui | awk 'BEGIN {FS="|"} {print$1}')
-patch_file=$(echo $gui | awk 'BEGIN {FS="|"}{print$2}')
-}
-#if exit is pressed
-check_buttonstatus(){
-	if [[ $bpn -eq 1 ]]; then
-		echo nope
-		exit 0
-#if OK button is pressed
-	elif [[ $bpn -eq 0 ]]; then
-			if [[ $ROM == "" ]] || [[ $patch_file == "" ]]; then
-			 	yad  --width 500 --title=Error  --window-icon=error --image=error --text="ROM or xDelta fields are empty"
-				guif
-				check_buttonstatus $bpn
-			else
-					xdelta3 -dfs $ROM $patch_file  "$(echo $ROM |sed "s/.iso//")"_patched.iso |yad --title="xDelta Patcher" --image=download  --text "patching..." --progress --pulsate --auto-close 
-					yad --width 500 --title="Success" --image=ok --text="ROM Patched!"
-			fi
-	fi
-}
+    
+    check_buttonstatus()
+    {
+        # If exit is pressed.
+        if [[ $bpn -eq 1 ]]; then
+            echo nope
+            exit 0
 
-guif
-check_buttonstatus $bpn
+        # If OK button is pressed.
+        elif [[ $bpn -eq 0 ]]; then
+            if [[ "$ROM" == *".iso"* ]] && [[ "$patch_file" == *".xdelta"* ]]; then
+            
+                xdelta3 -dfs "$ROM" "$patch_file" "$(echo $ROM |sed "s/.iso//") patched.iso" \
+                    |yad --width 350 --title="Patching..." --image=download \
+                    --text "Please wait for your ROM to be patched." --no-buttons --timeout=10
+
+                yad --width 500 --title="Success!" --image=ok --text="ROM Patched!"
+                guif
+                check_buttonstatus $bpn
+
+            else
+                yad --width 500 --title="Error!" --window-icon=error --image=error --text="ROM or xDelta fields are incorrect."
+                guif
+                check_buttonstatus $bpn
+            fi
+        fi
+    }
+    guif
+    check_buttonstatus $bpn
 fi
-
-
