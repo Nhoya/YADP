@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#                   Copyright (C) 2015 Nhoya.
+#                  Copyright (C) 2015 Nhoya.
 #
 #   YADP is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ else
     #GUI
     guif()
     {
-        gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch" \
-            --form --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
+        gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch" --form \
+            --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
 
         bpn=$?
         ROM=$(echo $gui | awk 'BEGIN {FS="|"} {print$1}')
@@ -72,21 +72,34 @@ else
         # If OK button is pressed.
         elif [[ $bpn -eq 0 ]]; then
             if [[ "$ROM" == *".iso"* ]] && [[ "$patch_file" == *".xdelta"* ]]; then
-            
-                xdelta3 -dfs "$ROM" "$patch_file" "$(echo $ROM |sed "s/.iso//") patched.iso" \
-                    |yad --width 350 --title="Patching..." --image=download \
-                    --text "Please wait for your ROM to be patched." --no-buttons --timeout=10
+                yad --width 400 --title="Patching..." --image=download --timeout=8 \
+                    --no-buttons --text "\nPlease wait for your ROM to be patched."
 
-                yad --width 500 --title="Success!" --image=ok --text="ROM Patched!"
-                guif
-                check_buttonstatus $bpn
+                patch_rom
 
             else
-                yad --width 500 --title="Error!" --window-icon=error --image=error --text="ROM or xDelta fields are incorrect."
+                yad --width 400 --title="Error!" --window-icon=error --image=error --text="\nROM or xDelta fields are incorrect."
                 guif
                 check_buttonstatus $bpn
             fi
         fi
+    }
+
+
+    patch_rom()
+    {
+        output=$((xdelta3 -dfs "$ROM" "$patch_file" "$(echo $ROM |sed "s/.iso//") patched.iso") 2>&1)
+        echo "$output"
+
+        if [[ "$output" == *"checksum mismatch"* ]]; then
+            yad --width 400 --title="Error!" --window-icon=error --image=error --text="\nROM and xdelta checksums don't match."
+
+        else
+            yad --width 400 --title="Success!" --image=ok --text="\nROM Patched!"
+        fi
+
+        guif
+        check_buttonstatus $bpn
     }
     guif
     check_buttonstatus $bpn
