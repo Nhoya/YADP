@@ -23,6 +23,7 @@ checkdep()
     if (! which yad &>/dev/null ); then
         echo "please install yad"
         exit 0
+        
     else
         for i in "${dep[@]}"; do
             if ( ! which $i &>/dev/null ); then
