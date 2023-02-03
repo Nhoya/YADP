@@ -62,7 +62,7 @@ else
     }
 
     
-    check_buttonstatus()
+    check_button_status()
     {
         # If exit is pressed.
         if [[ $bpn -eq 1 ]]; then
@@ -80,7 +80,7 @@ else
             else
                 yad --width 400 --title="Error!" --window-icon=error --image=error --text="\nROM or xDelta fields are incorrect."
                 guif
-                check_buttonstatus $bpn
+                check_button_status $bpn
             fi
         fi
     }
@@ -99,8 +99,8 @@ else
         fi
 
         guif
-        check_buttonstatus $bpn
+        check_button_status $bpn
     }
     guif
-    check_buttonstatus $bpn
+    check_button_status $bpn
 fi
