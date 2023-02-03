@@ -76,25 +76,26 @@ class YADP_GUI(QWidget):
 
         
     def showLicense(self):
-        QMessageBox.about(self, "YADP - License", "This program is free software: you can redistribute it and/or modify "
-                                                  "it under the terms of the GNU General Public License as published by "
-                                                  "the Free Software Foundation, either version 3 of the License, or"
-                                                  "(at your option) any later version.\n\n"
-                                                  "This program is distributed in the hope that it will be useful, "
-                                                  "but without any warranty; without even the implied warranty of "
-                                                  "merchantability or fitness for a particular purpose. See the "
-                                                  "GNU General Public License for more details.")
+        QMessageBox.about(self, "YADP - License",
+                                "This program is free software: you can redistribute it and/or modify "
+                                "it under the terms of the GNU General Public License as published by "
+                                "the Free Software Foundation, either version 3 of the License, or"
+                                "(at your option) any later version.\n\n"
+                                "This program is distributed in the hope that it will be useful, "
+                                "but without any warranty; without even the implied warranty of "
+                                "merchantability or fitness for a particular purpose. See the "
+                                "GNU General Public License for more details.")
 
         
     def openRom(self):
-        rom = QFileDialog.getOpenFileName(self, "Select Rom", "", "All files (*.*);;*.iso")
+        rom = QFileDialog.getOpenFileName(self, "Select Rom", "", "All files (*.*);;iso files (*.iso)")
         if rom:
             #print (rom[0])
             self.showRom(rom[0])
 
             
     def openXdelta(self):
-        xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file","", "All files (*.*);;*.xdelta")
+        xfile = QFileDialog.getOpenFileName(self, "Select xDelta patch file","", "All files (*.*);;xdelta files (*.xdelta)")
         if xfile:
             #print (xfile[0])
             self.showXdelta(xfile[0])
@@ -125,7 +126,7 @@ class YADP_GUI(QWidget):
         else:
             self.progressBar.hide()
             conf = QMessageBox.question(self, 'Error',
-            "Please select ROM and xdelta file before patching", QMessageBox.Ok)
+                    "Please select ROM and xdelta file before patching", QMessageBox.Ok)
 
             if conf == QMessageBox.Ok:
                 self.patch_button.setEnabled(True)
