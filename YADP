@@ -72,8 +72,8 @@ else
         # If OK button is pressed.
         elif [[ $bpn -eq 0 ]]; then
             if [[ "$ROM" == *".iso"* ]] && [[ "$patch_file" == *".xdelta"* ]]; then
-                yad --width 400 --title="Patching..." --image=download --timeout=8 \
-                    --no-buttons --text "\nPlease wait for your ROM to be patched."
+                yad --width 400 --title="Patching..." --image=download --timeout=6 \
+                    --no-buttons --text "Please wait for your ROM to be patched.\nYou can close this window."
 
                 patch_rom
 
@@ -89,7 +89,6 @@ else
     patch_rom()
     {
         output=$((xdelta3 -dfs "$ROM" "$patch_file" "$(echo $ROM |sed "s/.iso//") patched.iso") 2>&1)
-        echo "$output"
 
         if [[ "$output" == *"checksum mismatch"* ]]; then
             yad --width 400 --title="Error!" --window-icon=error --image=error --text="\nROM and xdelta checksums don't match."
