@@ -5,8 +5,7 @@ Yet Another xDelta Patcher
 
 YADP is the first front end for xDelta3 running on Linux.
 
-Actually YADP is able to patch ROMS without problem. ASAP i'l start working on patch generator
-
+Actually YADP is able to patch ROMS without any problems. Eventually i'll start working on a patch generator.
 
 ## How to install:
 
@@ -44,7 +43,7 @@ tar xf yad-x.x.x.tar.xz && cd yad-x.x.x
 make && sudo make install
 ```
 
-Or, if you don't like or are not able to compile just download and install the pre-compiled package from here:
+Or, if you don't like or are not able to compile just download and install the pre-compiled package from here: 
 http://pkgs.org/download/yad
 
 ## Running YADP:
