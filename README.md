@@ -51,7 +51,7 @@ http://pkgs.org/download/yad
 After solving the dependencies just clone the repo 
 
 ```
-git clone https://github.com/Nhoya/YADP
+git clone https://github.com/em-s-h/YADP.git
 ```
 ```
 cd YADP && chmod +x YADP
