@@ -48,7 +48,8 @@ export -f license
 checkdep
 if [[ $missing -eq 1 ]]; then
     misslist=$(echo ${miss[@]} | cut -c 4-)
-    yad --title=Error --window-icon=error --image=error --text=" $misslist not found \n please solve dependencies before run the program"
+    yad --title=Error --window-icon=error --image=error \
+        --text=" $misslist not found \n please solve these dependencies before running the program"
 
 else
     #GUI
