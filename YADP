@@ -56,7 +56,7 @@ else
     guif()
     {
         gui=$(yad --width 500 --title 'XDelta Patcher' --text "Select ROM, xdelta file and press Patch" --form \
-            --field='ROM:FL' --form --field='xdelta file:FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
+            --field='ROM::FL' --form --field='xdelta file::FL' --button="License:bash -c license" --button="gtk-close:1" --button "Patch:0")
 
         bpn=$?
         ROM=$(echo $gui | awk 'BEGIN {FS="|"} {print$1}')
